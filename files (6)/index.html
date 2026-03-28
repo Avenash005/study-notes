@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>StockPulse LIVE — NSE Real-Time Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">StockPulse</div>
+    <div class="live-badge"><div class="live-dot"></div><span id="liveLabel">LIVE NSE</span></div>
+    <div class="tb-info">
+      <div><div class="tb-sym" id="tbSym">RELIANCE</div><div class="tb-exch" id="tbEx">NSE · India</div></div>
+      <div><div class="tb-price up" id="tbPr">₹—</div><div class="tb-chg up" id="tbCh">Loading…</div></div>
+    </div>
+    <div class="tb-meta">
+      <div class="tm"><div class="tml">OPEN</div><div class="tmv" id="tO">—</div></div>
+      <div class="tm"><div class="tml">HIGH</div><div class="tmv up" id="tH">—</div></div>
+      <div class="tm"><div class="tml">LOW</div><div class="tmv dn" id="tL">—</div></div>
+      <div class="tm"><div class="tml">PREV</div><div class="tmv" id="tPC">—</div></div>
+      <div class="tm"><div class="tml">VOL</div><div class="tmv" id="tV">—</div></div>
+      <div class="tm"><div class="tml">52W H</div><div class="tmv up" id="tWH">—</div></div>
+      <div class="tm"><div class="tml">52W L</div><div class="tmv dn" id="tWL">—</div></div>
+    </div>
+    <div class="tf-row" id="tfR">
+      <button class="tf" data-tf="1min">1m</button>
+      <button class="tf" data-tf="5min">5m</button>
+      <button class="tf on" data-tf="15min">15m</button>
+      <button class="tf" data-tf="1h">1h</button>
+      <button class="tf" data-tf="1day">1D</button>
+      <button class="tf" data-tf="1week">1W</button>
+    </div>
+    <div class="sw">
+      <span class="search-icon">⌕</span>
+      <input id="si" placeholder="Search NSE/NASDAQ…" autocomplete="off"/>
+      <div class="sdrop" id="sd"></div>
+    </div>
+    <div class="mkt-right">
+      <div id="apiStat" class="api-status loading">⟳ CONNECTING</div>
+      <div class="clock-box">
+        <div class="clk" id="clk">—</div>
+        <div class="mst-row">
+          <div class="mdot closed" id="md"></div>
+          <div class="mst closed" id="ms">CHECKING</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARKET CLOSED BANNER -->
+  <div class="mkt-banner hidden" id="mb">
+    <span class="banner-icon">🔒</span>
+    <div>
+      <div class="banner-title" id="bt">MARKET CLOSED</div>
+      <div class="banner-sub" id="bs">Markets are closed</div>
+    </div>
+    <div class="sim-pill">📊 LAST KNOWN DATA</div>
+  </div>
+
+  <!-- TICKER BAR -->
+  <div class="ticker-bar"><div class="ts" id="ts"></div></div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- LEFT: WATCHLIST -->
+    <div class="left">
+      <div class="ph">Watchlist <span id="wlc" class="ph-time"></span></div>
+      <div class="wl" id="wl"></div>
+      <div class="nob" id="nob" style="display:none">
+        <div class="nob-l">Next Market Open</div>
+        <div class="nob-v" id="no2">—</div>
+        <div class="nob-s" id="ns2">NSE Mon–Fri 9:15–15:30 IST</div>
+      </div>
+    </div>
+
+    <!-- CENTER: CHART -->
+    <div class="center">
+      <div class="ct">
+        <span class="ct-label">OVERLAY:</span>
+        <button class="ib on" data-ind="ema">EMA 20/50</button>
+        <button class="ib on" data-ind="bb">Bollinger</button>
+        <button class="ib on" data-ind="vwap">VWAP</button>
+        <button class="ib on" data-ind="sig">Signals</button>
+        <div class="ct-note" id="cNote"></div>
+        <div class="refresh-bar">
+          <div class="refresh-fill" id="rfill" style="width:100%"></div>
+        </div>
+      </div>
+      <div class="ca">
+        <canvas id="mc"></canvas>
+        <div class="data-tag live" id="dtag">● LIVE NSE</div>
+        <div class="xht" id="xht"></div>
+      </div>
+      <div class="sub-wrap">
+        <div class="sc2" style="height:58px"><canvas id="rc"></canvas><div class="sl2">RSI(14)</div></div>
+        <div class="sc2" style="height:58px"><canvas id="macc"></canvas><div class="sl2">MACD</div></div>
+        <div class="sc2" style="height:36px"><canvas id="vc"></canvas><div class="sl2">VOL</div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: PANELS -->
+    <div class="right">
+      <div class="trow">
+        <div class="tab on" data-t="signal">📡 Signal</div>
+        <div class="tab" data-t="options">⚡ Options</div>
+        <div class="tab" data-t="ai">🤖 AI</div>
+      </div>
+
+      <!-- SIGNAL TAB -->
+      <div class="tb on" id="tab-signal">
+        <div class="sb">
+          <div class="sm WAIT" id="smain">
+            <div class="sw3" id="sword">WAIT</div>
+            <div class="sr" id="sreason">Loading real-time data…</div>
+            <div class="sbw">
+              <div class="sbar"><div class="sfill" id="sfill" style="width:50%"></div></div>
+              <span class="spct" id="spct">—</span>
+            </div>
+          </div>
+          <div class="mn" id="mn" style="display:none"></div>
+          <div class="lg" style="margin-top:6px">
+            <div class="lv"><div class="ll">Entry Now</div><div class="lval E" id="lvE">—</div></div>
+            <div class="lv"><div class="ll">Stop Loss</div><div class="lval S" id="lvS">—</div></div>
+            <div class="lv"><div class="ll">Target 1</div><div class="lval T" id="lvT1">—</div></div>
+            <div class="lv"><div class="ll">Target 2</div><div class="lval T" id="lvT2">—</div></div>
+          </div>
+          <div class="st2">
+            <span class="stl" id="tl2">Next refresh in</span>
+            <span class="stv" id="tv2">—</span>
+            <span class="rr-label" id="rr">R:R —</span>
+          </div>
+        </div>
+        <div class="gr" id="gr"></div>
+        <div class="ph">Signal Log <span id="sigCount" class="ph-time"></span></div>
+        <div id="sl3"></div>
+      </div>
+
+      <!-- OPTIONS TAB -->
+      <div class="tb" id="tab-options">
+        <div class="op">
+          <div class="op-label">EXPIRY (Based on real spot price)</div>
+          <div class="er" id="er"></div>
+          <div class="ots">
+            <button class="ot2 on" data-ot="chain">Chain</button>
+            <button class="ot2" data-ot="strategy">Strategy</button>
+            <button class="ot2" data-ot="greeks">Greeks</button>
+          </div>
+          <div id="otc-chain">
+            <div class="chain-info">
+              <span>Click any strike to build leg</span>
+              <span class="chain-spot" id="csp">—</span>
+            </div>
+            <div style="overflow-x:auto">
+              <table class="ct2">
+                <thead>
+                  <tr>
+                    <th>LTP</th><th>Δ</th><th>IV%</th><th>OI</th>
+                    <th class="ctr">STRIKE</th>
+                    <th>OI</th><th>IV%</th><th>Δ</th><th>LTP</th>
+                  </tr>
+                </thead>
+                <tbody id="cb"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="otc-strategy" style="display:none"><div id="stb"></div></div>
+          <div id="otc-greeks" style="display:none"><div id="gb"></div></div>
+        </div>
+      </div>
+
+      <!-- AI TAB -->
+      <div class="tb" id="tab-ai">
+        <div class="aiw">
+          <div class="ai-note" id="aiNote">Loading market status…</div>
+          <button class="aib" id="aib" onclick="doAI()">⬡ Analyze with Claude AI</button>
+          <div class="aisp" id="aisp"><div class="spin"></div>Analyzing live signals…</div>
+          <div class="aio" id="aio"></div>
+        </div>
+      </div>
+
+    </div><!-- /right -->
+  </div><!-- /body -->
+</div><!-- /shell -->
+
+<script src="app.js"></script>
+</body>
+</html>
