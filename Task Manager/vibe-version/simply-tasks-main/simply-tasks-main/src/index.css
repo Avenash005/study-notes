@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 20% 97%;
+    --foreground: 30 10% 12%;
+
+    --card: 40 15% 95%;
+    --card-foreground: 30 10% 12%;
+
+    --popover: 40 20% 97%;
+    --popover-foreground: 30 10% 12%;
+
+    --primary: 30 10% 12%;
+    --primary-foreground: 40 20% 97%;
+
+    --secondary: 35 12% 90%;
+    --secondary-foreground: 30 10% 12%;
+
+    --muted: 35 10% 92%;
+    --muted-foreground: 30 6% 50%;
+
+    --accent: 25 60% 52%;
+    --accent-foreground: 40 20% 97%;
+
+    --destructive: 0 55% 52%;
+    --destructive-foreground: 40 20% 97%;
+
+    --border: 35 12% 88%;
+    --input: 35 12% 88%;
+    --ring: 30 10% 12%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --task-complete: 145 40% 46%;
+  }
+
+  .dark {
+    --background: 30 8% 8%;
+    --foreground: 35 15% 88%;
+    --card: 30 8% 11%;
+    --card-foreground: 35 15% 88%;
+    --popover: 30 8% 8%;
+    --popover-foreground: 35 15% 88%;
+    --primary: 35 15% 88%;
+    --primary-foreground: 30 8% 8%;
+    --secondary: 30 6% 16%;
+    --secondary-foreground: 35 15% 88%;
+    --muted: 30 6% 16%;
+    --muted-foreground: 30 8% 55%;
+    --accent: 25 60% 52%;
+    --accent-foreground: 40 20% 97%;
+    --destructive: 0 55% 45%;
+    --destructive-foreground: 40 20% 97%;
+    --border: 30 6% 18%;
+    --input: 30 6% 18%;
+    --ring: 35 15% 88%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --task-complete: 145 40% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+}
